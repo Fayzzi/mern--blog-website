@@ -35,6 +35,7 @@ export default function Header() {
         <Link to={"/login"}>
           <Button
             className=" hidden sm:inline-block"
+            outline
             gradientDuoTone={"purpleToBlue"}
             pill
           >
