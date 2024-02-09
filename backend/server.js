@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+const app = require("./app");
 const mongoose = require("mongoose");
 //uncaught exception
 process.on("uncaughtException", (err) => {

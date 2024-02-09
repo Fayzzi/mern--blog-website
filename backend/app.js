@@ -21,6 +21,8 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config();
 }
 //routes
-
+const userRoutes = require("./Routes/UserRoutes");
+app.use("/api/v2/user", userRoutes);
 //Handleing errors
 app.use(errorMidleware);
+module.exports = app;
