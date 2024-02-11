@@ -8,6 +8,7 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { GetUser } from "../../components/Redux/Reducers/UserReducers";
+import OAuth from "../../components/OAuth/OAuth";
 
 export default function Login() {
   const [email, setemail] = useState("");
@@ -94,6 +95,7 @@ export default function Login() {
             >
               Login
             </Button>
+            <OAuth />
             <h1 className="mt-4">
               Not a member?
               <Link to={"/signup"} className="text-blue-500 ml-1">
