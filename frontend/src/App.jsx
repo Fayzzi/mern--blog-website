@@ -12,9 +12,12 @@ import ActivateUser from "./Pages/ActivationPagr/ActivateUser";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./components/Redux/Reducers/UserReducers";
+import ProtectedRoutes from "./components/ProtectedRoutes/Protected";
 function App() {
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { user, userLoading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(GetUser());
@@ -29,7 +32,9 @@ function App() {
           <Route element={<Projects />} path="/projects" />
           <Route element={<Login />} path="/login" />
           <Route element={<Signup />} path="/signup" />
-          <Route element={<Dashboard />} path="/dashboard" />
+          <Route element={<ProtectedRoutes />}>
+            <Route element={<Dashboard />} path="/dashboard" />
+          </Route>
           <Route
             element={<ActivateUser />}
             path="/activation/:activationtoken"
