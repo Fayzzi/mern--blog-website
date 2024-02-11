@@ -3,9 +3,10 @@ import { Button, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
-
+import { useSelector } from "react-redux";
 export default function Header() {
   const path = useLocation().pathname;
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   return (
     <Navbar className="border-b-2">
       <Link
@@ -32,16 +33,29 @@ export default function Header() {
         <Button className="w-12 h-11 hidden sm:inline-block" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to={"/login"}>
-          <Button
-            className=" hidden sm:inline-block"
-            outline
-            gradientDuoTone={"purpleToBlue"}
-            pill
-          >
-            Login
-          </Button>
-        </Link>
+        {isAuthenticated ? (
+          <Link to={"/dashboard"}>
+            <Button
+              className=" hidden sm:inline-block"
+              outline
+              gradientDuoTone={"purpleToBlue"}
+              pill
+            >
+              {user?.name}
+            </Button>
+          </Link>
+        ) : (
+          <Link to={"/login"}>
+            <Button
+              className=" hidden sm:inline-block"
+              outline
+              gradientDuoTone={"purpleToBlue"}
+              pill
+            >
+              Login
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>

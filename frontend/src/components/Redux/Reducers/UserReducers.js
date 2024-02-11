@@ -6,11 +6,11 @@ const initialState = {
   userError: null,
   userLoading: true,
 };
-const GetUser = createAsyncThunk(
+export const GetUser = createAsyncThunk(
   "user/getUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v2/get-user");
+      const response = await axios.get("/api/v2/user/get-user");
       return response.data.getUser;
     } catch (error) {
       if (error.response) {

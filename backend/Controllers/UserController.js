@@ -79,6 +79,24 @@ userActivation = catchAsyncErrors(async (req, res, next) => {
     sendToken(newUser, 200, res);
   }
 });
+//login api
+loginUser = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+  const checkUser = await User.findOne({ email: email }).select("+password");
+  if (checkUser) {
+    //check if the password is valid or not
+    const passwordValid = checkUser.comparePassword(password);
+    if (passwordValid) {
+      sendToken(checkUser, 200, res);
+    } else {
+      return next(new ErrorHandler("Password is incorrect", 500));
+    }
+  } else {
+    return next(
+      new ErrorHandler("No user found with these email address", 500)
+    );
+  }
+});
 //getting current looged in user
 getuser = catchAsyncErrors(async (req, res, next) => {
   const getUser = await User.findById(req.user.id);
@@ -90,8 +108,10 @@ getuser = catchAsyncErrors(async (req, res, next) => {
     getUser,
   });
 });
+
 module.exports = {
   registerUser,
   userActivation,
   getuser,
+  loginUser,
 };

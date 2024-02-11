@@ -9,7 +9,17 @@ import Projects from "./Pages/Projects/Projects";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ActivateUser from "./Pages/ActivationPagr/ActivateUser";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GetUser } from "./components/Redux/Reducers/UserReducers";
 function App() {
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(GetUser());
+  }, [dispatch]);
+  console.log(user);
   return (
     <>
       <Routes>
