@@ -4,11 +4,15 @@ import { useState } from "react";
 import { Button } from "flowbite-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FaRegEyeSlash } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa6";
+
 export default function Signup() {
   const [image, setImage] = useState(null);
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [visible, setVisible] = useState(false);
   const registerUser = async (e) => {
     e.preventDefault();
     await axios
@@ -73,16 +77,28 @@ export default function Signup() {
             </div>
             <div className="flex my-4 flex-col gap-2">
               <h1 className="font-bold text-[16px]">Password</h1>
-              <input
-                type="text"
-                value={password}
-                onChange={(e) => setpassword(e.target.value)}
-                name=""
-                className="w-full p-2 border-gray-300 rounded  focus:border-blue-500"
-                id=""
-              />
+              <div className="relative">
+                <input
+                  type={visible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
+                  name=""
+                  className="w-full p-2 border-gray-300 rounded  focus:border-blue-500"
+                  id=""
+                />
+                <div className="absolute select-none right-2 top-2">
+                  {visible ? (
+                    <FaRegEyeSlash
+                      onClick={(e) => setVisible(!visible)}
+                      size={24}
+                    />
+                  ) : (
+                    <FaRegEye onClick={(e) => setVisible(!visible)} size={24} />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4">
               {image ? (
                 <img
                   className="w-12 h-12 rounded-full object-cover"
