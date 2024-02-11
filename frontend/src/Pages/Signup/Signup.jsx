@@ -2,8 +2,29 @@ import { Link } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
 import { useState } from "react";
 import { Button } from "flowbite-react";
+import axios from "axios";
+import { toast } from "react-toastify";
 export default function Signup() {
   const [image, setImage] = useState(null);
+  const [name, setname] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const registerUser = async (e) => {
+    e.preventDefault();
+    await axios
+      .post("/api/v2/user/signup", {
+        name,
+        email,
+        password,
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   console.log(image);
   const selectImage = (e) => {
     e.preventDefault();
@@ -20,6 +41,8 @@ export default function Signup() {
         </div>
         <div className="  shrink-0 sm:mt-0 mt-4">
           <form
+            onSubmit={registerUser}
+            aria-required
             action=""
             className=" shadow border shrink-0 rounded sm:max-w-[28rem]   sm:mx-auto p-8"
           >
@@ -30,7 +53,9 @@ export default function Signup() {
               <h1 className="font-bold text-[16px]">Username</h1>
               <input
                 type="text"
-                name=""
+                value={name}
+                onChange={(e) => setname(e.target.value)}
+                name="name"
                 className="w-full p-2 border-gray-300 rounded  focus:border-blue-500"
                 id=""
               />
@@ -38,8 +63,10 @@ export default function Signup() {
             <div className="flex my-4 flex-col gap-2">
               <h1 className="font-bold text-[16px]">Email</h1>
               <input
-                type="text"
-                name=""
+                type="email"
+                value={email}
+                onChange={(e) => setemail(e.target.value)}
+                name="user-email"
                 className="w-full p-2 border-gray-300 rounded  focus:border-blue-500"
                 id=""
               />
@@ -48,6 +75,8 @@ export default function Signup() {
               <h1 className="font-bold text-[16px]">Password</h1>
               <input
                 type="text"
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
                 name=""
                 className="w-full p-2 border-gray-300 rounded  focus:border-blue-500"
                 id=""
@@ -81,11 +110,12 @@ export default function Signup() {
               </div>
             </div>
             <Button
+              onClick={registerUser}
               className=" w-full "
               outline
               gradientDuoTone={"purpleToBlue"}
             >
-              Login
+              Register
             </Button>
             <h1 className="mt-4">
               Already have an account?

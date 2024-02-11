@@ -2,12 +2,17 @@ const catchAsyncErrors = require("./../middlewares/CatchAsyncError.js");
 const ErrorHandler = require("./../middlewares/ErrorHandler");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-
+const User = require("./../Models/User");
+const sendToken = require("../Utils/UserJwtToken.js");
 registerUser = catchAsyncErrors(async (req, res, next) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return next(new ErrorHandler(500, "All fields must be filled"));
   } else {
+    const checkUser = await User.findOne({ email: email });
+    if (checkUser) {
+      return next(new ErrorHandler("Email is already registred!!", 500));
+    }
     const user = {
       name,
       email,
@@ -52,10 +57,41 @@ const sendMail = async (options) => {
     from: process.env.SMPT_MAIL,
     to: options.email,
     subject: options.subject,
-    text: options.text,
+    text: options.message,
   });
 };
-
+//activating user
+userActivation = catchAsyncErrors(async (req, res, next) => {
+  const { activationtoken } = req.params;
+  const userData = jwt.verify(
+    activationtoken,
+    process.env.ACTIVATION_TOKEN_SECRET
+  );
+  const checkUser = await User.findOne({ email: userData.email });
+  if (checkUser) {
+    return next(new ErrorHandler("Email is already registred!!", 500));
+  } else {
+    const newUser = await User.create({
+      email: userData.email,
+      name: userData.name,
+      password: userData.password,
+    });
+    sendToken(newUser, 200, res);
+  }
+});
+//getting current looged in user
+getuser = catchAsyncErrors(async (req, res, next) => {
+  const getUser = await User.findById(req.user.id);
+  if (!getUser) {
+    return next(new ErrorHandler("Please log in first!!", 500));
+  }
+  res.status(200).json({
+    success: true,
+    getUser,
+  });
+});
 module.exports = {
   registerUser,
+  userActivation,
+  getuser,
 };
