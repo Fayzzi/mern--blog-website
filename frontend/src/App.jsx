@@ -32,9 +32,14 @@ function App() {
           <Route element={<Projects />} path="/projects" />
           <Route element={<Login />} path="/login" />
           <Route element={<Signup />} path="/signup" />
-          <Route element={<ProtectedRoutes />}>
-            <Route element={<Dashboard />} path="/dashboard" />
-          </Route>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoutes>
+                <Dashboard />
+              </ProtectedRoutes>
+            }
+          />
           <Route
             element={<ActivateUser />}
             path="/activation/:activationtoken"

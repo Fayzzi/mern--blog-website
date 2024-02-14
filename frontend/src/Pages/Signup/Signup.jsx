@@ -15,12 +15,14 @@ export default function Signup() {
   const [visible, setVisible] = useState(false);
   const registerUser = async (e) => {
     e.preventDefault();
+    const formadata = new FormData();
+    formadata.append("name", name);
+    formadata.append("email", email);
+    formadata.append("password", password);
+    formadata.append("file", image);
+
     await axios
-      .post("/api/v2/user/signup", {
-        name,
-        email,
-        password,
-      })
+      .post("/api/v2/user/signup", formadata)
       .then((response) => {
         toast.success(response.data.message);
       })
@@ -29,7 +31,6 @@ export default function Signup() {
       });
   };
 
-  console.log(image);
   const selectImage = (e) => {
     e.preventDefault();
     setImage(e.target.files[0]);

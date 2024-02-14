@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const User = require("./../Models/User");
 const sendToken = require("../Utils/UserJwtToken.js");
+const fs = require("fs");
 registerUser = catchAsyncErrors(async (req, res, next) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -11,12 +12,21 @@ registerUser = catchAsyncErrors(async (req, res, next) => {
   } else {
     const checkUser = await User.findOne({ email: email });
     if (checkUser) {
+      const filename = req.file.filename;
+      const filepath = "uploads/" + filename;
+      fs.unlink(filepath, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
       return next(new ErrorHandler("Email is already registred!!", 500));
     }
+    const filename = req.file.filename;
     const user = {
       name,
       email,
       password,
+      avatar: filename,
     };
     const activationtoken = createActivationToken(user);
     const activation_url =
@@ -75,6 +85,7 @@ userActivation = catchAsyncErrors(async (req, res, next) => {
       email: userData.email,
       name: userData.name,
       password: userData.password,
+      avatar: userData.avatar,
     });
     sendToken(newUser, 200, res);
   }

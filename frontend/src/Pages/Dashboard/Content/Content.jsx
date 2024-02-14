@@ -12,11 +12,11 @@ export default function Content({ active }) {
   return (
     <div className="w-full dark:bg-[rgb(16,23,42)]">
       {active === 1 && (
-        <div className="w-full dark:bg-[rgb(16,23,42)] px-4 py-6 bg-gray-100 min-h-[90vh] mt-6 rounded-t">
+        <div className="w-full dark:bg-[rgb(16,23,42)] px-4 py-6 min-h-[90vh] mt-6 rounded-t">
           <h1 className="text-center md:text-[23px] text-[20px] font-bold ">
             Profile
           </h1>
-          <form action="" className="my-6 px-6">
+          <form action="" className="my-6 px-6  md:w-[40vw] mx-auto">
             <div className="w-full flex items-center justify-center">
               <div className="relative">
                 <img
@@ -38,7 +38,7 @@ export default function Content({ active }) {
                 onChange={(e) => setName(e.target.value)}
                 name="user-name"
                 type="text"
-                className="w-full p-2 rounded text-black  appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className=" p-2 rounded text-black md:w-[40vw]   appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <div className="flex flex-col my-4 gap-2">
@@ -50,7 +50,7 @@ export default function Content({ active }) {
                 value={user?.email}
                 onChange={(e) => setEmail(e.target.value)}
                 name="user-email"
-                className="w-full p-2 rounded text-black  appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className=" p-2 rounded text-black md:w-[40vw]  appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <div className="flex flex-col my-4 gap-2">
@@ -64,12 +64,12 @@ export default function Content({ active }) {
                 name="user-password"
                 type="password"
                 placeholder="enter your password to save changes"
-                className="w-full p-2 rounded  appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className=" p-2 rounded  md:w-[40vw] appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <input
               type="submit"
-              className="border border-gray-300 p-3 w-full my-4 rounded-md cursor-pointer"
+              className="border border-gray-300 p-3  md:w-[40vw] my-4 rounded-md cursor-pointer"
             />
           </form>
         </div>
