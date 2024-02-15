@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RiPencilLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "flowbite-react";
 import {
   clearErrors,
   updateUser,
@@ -125,10 +127,19 @@ export default function Content({ active }) {
                 className=" p-2 rounded  md:w-[40vw] appearance-none border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
-            <input
-              type="submit"
-              className="border border-gray-300 p-3  md:w-[40vw] my-4 rounded-md cursor-pointer"
-            />
+            <div className="flex flex-col gap-4 my-4">
+              <Button type="submit" gradientDuoTone={"purpleToPink"} outline>
+                Submit
+              </Button>
+              {user && user?.isAdmin ? (
+                <Link to={"/create-post-admin"}>
+                  {" "}
+                  <Button gradientDuoTone={"greenToBlue"} outline>
+                    Create a post
+                  </Button>
+                </Link>
+              ) : null}
+            </div>
           </form>
         </div>
       )}

@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -34,9 +38,13 @@ userSchema.pre("save", async function (next) {
 });
 //getting jwtToken
 userSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_TOKEN_SECRET, {
-    expiresIn: process.env.JWT_TOKEN_DURATION,
-  });
+  return jwt.sign(
+    { id: this._id, isAdmin: this.isAdmin },
+    process.env.JWT_TOKEN_SECRET,
+    {
+      expiresIn: process.env.JWT_TOKEN_DURATION,
+    }
+  );
 };
 //comparing passwords
 userSchema.methods.comparePassword = function (password) {

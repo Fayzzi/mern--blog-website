@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./components/Redux/Reducers/UserReducers";
 import ProtectedRoutes from "./components/ProtectedRoutes/Protected";
+import Createpostpage from "./Pages/ADMIN/Createpostpage";
+import AdminPrivate from "./components/ProtectedRoutes/AdminPrivate";
 function App() {
   const dispatch = useDispatch();
   const { user, userLoading, isAuthenticated } = useSelector(
@@ -38,6 +40,14 @@ function App() {
               <ProtectedRoutes>
                 <Dashboard />
               </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/create-post-admin"
+            element={
+              <AdminPrivate>
+                <Createpostpage />
+              </AdminPrivate>
             }
           />
           <Route
