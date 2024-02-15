@@ -96,7 +96,7 @@ loginUser = catchAsyncErrors(async (req, res, next) => {
   const checkUser = await User.findOne({ email: email }).select("+password");
   if (checkUser) {
     //check if the password is valid or not
-    const passwordValid = checkUser.comparePassword(password);
+    const passwordValid = await checkUser.comparePassword(password);
     if (passwordValid) {
       sendToken(checkUser, 200, res);
     } else {
@@ -119,10 +119,54 @@ getuser = catchAsyncErrors(async (req, res, next) => {
     getUser,
   });
 });
+//updaing user data
+updateUSer = catchAsyncErrors(async (req, res, next) => {
+  const { name, email, password } = req.body;
+  const checkUser = await User.findById(req.user.id).select("+password");
+  if (checkUser) {
+    const checkPassword = await checkUser.comparePassword(password);
+    if (checkPassword) {
+      if (req.file) {
+        const alreadyAded = checkUser.avatar;
+        const alredayPath = "uploads/" + alreadyAded;
+        if (alredayPath) {
+          fs.unlink(alredayPath, (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+        User.name = name;
+        checkUser.email = email;
+        checkUser.avatar = req.file.filename;
+        await checkUser.save();
+        res.status(200).json({
+          success: true,
+          message: "success",
+          checkUser,
+        });
+      } else {
+        checkUser.name = name;
+        checkUser.email = email;
+        await checkUser.save();
+        res.status(200).json({
+          success: true,
+          message: "success",
+          checkUser,
+        });
+      }
+    } else {
+      return next(new ErrorHandler("Password is invalid!!", 500));
+    }
+  } else {
+    return next(new ErrorHandler("No user found with this credential!!", 500));
+  }
+});
 
 module.exports = {
   registerUser,
   userActivation,
   getuser,
   loginUser,
+  updateUSer,
 };
