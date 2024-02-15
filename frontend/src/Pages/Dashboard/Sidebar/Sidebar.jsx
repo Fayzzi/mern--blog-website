@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
 import { IoLogIn, IoLogInOutline, IoPersonOutline } from "react-icons/io5";
 import { IoPerson } from "react-icons/io5";
-import { Link, useSearchParams } from "react-router-dom";
-
+import axios from "axios";
+import { GetUser } from "../../../components/Redux/Reducers/UserReducers";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function Sidebar({ active, setActive }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signoutUser = async (e) => {
+    await axios
+      .post("api/v2/user/logout")
+      .then((response) => navigate("/"))
+      .finally(() => dispatch(GetUser()));
+  };
   return (
     <div className="bg-gray-100 sticky top-12 left-0 dark:bg-[rgb(16,23,42)] border py-5 px-4 mt-6  flex flex-col gap-6 rounded-lg">
       {active === 1 ? (
@@ -33,7 +42,7 @@ export default function Sidebar({ active, setActive }) {
         </div>
       ) : (
         <div
-          onClick={(e) => setActive(2)}
+          onClick={signoutUser}
           className="flex gap-1 items-center justify-center"
         >
           <IoLogInOutline size={25} />

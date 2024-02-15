@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RiPencilLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
-import { updateUser } from "../../../components/Redux/Reducers/UserReducers";
+import {
+  clearErrors,
+  updateUser,
+} from "../../../components/Redux/Reducers/UserReducers";
 import { toast } from "react-toastify";
 export default function Content({ active }) {
   const { user, userError, userUpdateSuccess } = useSelector(
@@ -15,11 +18,13 @@ export default function Content({ active }) {
   useEffect(() => {
     if (userError) {
       toast.error(userError);
+      dispatch(clearErrors());
     }
     if (userUpdateSuccess) {
       toast.success("Updated successfully!!");
+      dispatch(clearErrors());
     }
-  }, [userError, userUpdateSuccess]);
+  }, [userError, userUpdateSuccess, dispatch]);
   const updateUserData = async (e) => {
     e.preventDefault();
     const formData = new FormData();

@@ -122,7 +122,7 @@ getuser = catchAsyncErrors(async (req, res, next) => {
 //updaing user data
 updateUSer = catchAsyncErrors(async (req, res, next) => {
   const { name, email, password } = req.body;
-  const checkUser = await User.findById(req.user.id).select("+password");
+  const checkUser = await User.findOne({ email: email }).select("+password");
   if (checkUser) {
     const checkPassword = await checkUser.comparePassword(password);
     if (checkPassword) {
@@ -162,11 +162,17 @@ updateUSer = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("No user found with this credential!!", 500));
   }
 });
-
+logoutUser = catchAsyncErrors(async (req, res, next) => {
+  res.clearCookie("user_token").status(200).json({
+    success: true,
+    message: "User has been signed out successfully!",
+  });
+});
 module.exports = {
   registerUser,
   userActivation,
   getuser,
   loginUser,
   updateUSer,
+  logoutUser,
 };
