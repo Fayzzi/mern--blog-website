@@ -6,12 +6,33 @@ import { useSelector } from "react-redux";
 export default function Allposts() {
   const { user } = useSelector((state) => state.user);
   const [data, setData] = useState([]);
+  const [showmore, setShowmore] = useState(true);
+  const handleShowmore = async (e) => {
+    e.preventDefault();
+    const startLength = data.length; // Use data.length instead of data && data.length
+    try {
+      const { data } = await axios.get(
+        "/api/v2/admin/getposts?userId=" +
+          user?._id +
+          `&startIndex=${startLength}`
+      );
+      setData((prevData) => [...prevData, ...data.posts]); // Correctly append new posts
+      setShowmore(data.posts.length < 9 ? false : true); // Show more if there are new posts
+    } catch (error) {
+      console.error("Error fetching more posts:", error);
+    }
+  };
   //sending userId in params to backend
   useEffect(() => {
     const fetchPost = async () => {
       await axios
         .get("/api/v2/admin/getposts?userId=" + user?._id)
-        .then((response) => setData(response.data.posts))
+        .then((response) => {
+          setData(response.data.posts);
+          if (response.data.length < 9) {
+            setShowmore(false);
+          }
+        })
         .catch((e) => alert(e.response.data.message));
     };
     if (user && user?.isAdmin) {
@@ -23,9 +44,10 @@ export default function Allposts() {
       <h1 className="text-center mb-6 text-[20px] md:text-[24px] font-semibold">
         Posts
       </h1>
-      <div className="table-auto overflow-x-scroll mx-auto  scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500">
-        {user && user?.isAdmin && data.length > 0 ? (
-          <>
+
+      {user && user?.isAdmin && data.length > 0 ? (
+        <>
+          <div className="table-auto overflow-x-scroll mx-auto  scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500">
             <Table hoverable className="shadow-sm">
               <Table.Head>
                 <Table.HeadCell>Date Updated</Table.HeadCell>
@@ -63,11 +85,19 @@ export default function Allposts() {
                   </Table.Body>
                 ))}
             </Table>
-          </>
-        ) : (
-          <span> data to show</span>
-        )}
-      </div>
+          </div>
+          {showmore ? (
+            <div
+              onClick={handleShowmore}
+              className="p-2 text-teal-400 border w-fit mx-auto my-5 rounded cursor-pointer"
+            >
+              showmore
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <span> data to show</span>
+      )}
     </div>
   );
 }
