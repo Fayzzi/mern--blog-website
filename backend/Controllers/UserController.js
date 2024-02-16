@@ -168,6 +168,13 @@ logoutUser = catchAsyncErrors(async (req, res, next) => {
     message: "User has been signed out successfully!",
   });
 });
+checkUer = catchAsyncErrors(async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    user: [req.user.isAdmin, req.user],
+    message: "User has been signed out successfully!",
+  });
+});
 module.exports = {
   registerUser,
   userActivation,
@@ -175,4 +182,5 @@ module.exports = {
   loginUser,
   updateUSer,
   logoutUser,
+  checkUer,
 };

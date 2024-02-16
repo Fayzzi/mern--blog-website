@@ -24,8 +24,11 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 //routes
 const userRoutes = require("./Routes/UserRoutes");
 const GoogelAuth = require("./Controllers/GoogleAuthController");
+const admin = require("./Controllers/AdminController");
+
 app.use("/api/v2/user", userRoutes);
 app.use("/api/v2/auth", GoogelAuth);
+app.use("/api/v2/admin", admin);
 
 //Handleing errors
 app.use(errorMidleware);

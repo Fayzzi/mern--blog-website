@@ -37,7 +37,7 @@ export default function Content({ active }) {
     dispatch(updateUser({ formData: formData }));
   };
   return (
-    <div className="w-full dark:bg-[rgb(16,23,42)]">
+    <div className="w-full bg-gray-100 dark:bg-[rgb(16,23,42)]">
       {active === 1 && (
         <div className="w-full dark:bg-[rgb(16,23,42)] px-4 py-6 min-h-[90vh] mt-6 rounded-t">
           <h1 className="text-center md:text-[23px] text-[20px] font-bold ">

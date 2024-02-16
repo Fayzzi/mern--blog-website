@@ -7,6 +7,7 @@ const {
   loginUser,
   updateUSer,
   logoutUser,
+  checkUer,
 } = require("../Controllers/UserController");
 const { upload } = require("./../multer");
 const { isAuthenticated } = require("../middlewares/IsAuthenticated");
@@ -15,6 +16,7 @@ router.post("/activation/:activationtoken", userActivation);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/get-user", isAuthenticated, getuser);
+router.get("/check-user", isAuthenticated, checkUer);
 router.put("/update-user", isAuthenticated, upload.single("file"), updateUSer);
 
 module.exports = router;
