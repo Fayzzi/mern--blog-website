@@ -1,11 +1,18 @@
-import { IoLogIn, IoLogInOutline, IoPersonOutline } from "react-icons/io5";
+import {
+  IoDocument,
+  IoDocumentOutline,
+  IoLogIn,
+  IoLogInOutline,
+  IoPersonOutline,
+} from "react-icons/io5";
 import { IoPerson } from "react-icons/io5";
 import axios from "axios";
 import { GetUser } from "../../../components/Redux/Reducers/UserReducers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 export default function Sidebar({ active, setActive }) {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const signoutUser = async (e) => {
     await axios
@@ -51,6 +58,28 @@ export default function Sidebar({ active, setActive }) {
           </span>
         </div>
       )}
+      {user && user?.isAdmin ? (
+        <div>
+          {active === 3 ? (
+            <div className="flex gap-1 items-center justify-center">
+              <IoDocument size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Profile
+              </span>
+            </div>
+          ) : (
+            <div
+              onClick={(e) => setActive(3)}
+              className="flex gap-1 items-center justify-center"
+            >
+              <IoDocumentOutline size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Posts
+              </span>
+            </div>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

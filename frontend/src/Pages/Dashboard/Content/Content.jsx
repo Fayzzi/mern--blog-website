@@ -8,6 +8,7 @@ import {
   updateUser,
 } from "../../../components/Redux/Reducers/UserReducers";
 import { toast } from "react-toastify";
+import Allposts from "../../ADMIN/Allpost/Allposts";
 export default function Content({ active }) {
   const { user, userError, userUpdateSuccess } = useSelector(
     (state) => state.user
@@ -36,6 +37,7 @@ export default function Content({ active }) {
     formData.append("file", image);
     dispatch(updateUser({ formData: formData }));
   };
+
   return (
     <div className="w-full bg-gray-100 dark:bg-[rgb(16,23,42)]">
       {active === 1 && (
@@ -143,6 +145,7 @@ export default function Content({ active }) {
           </form>
         </div>
       )}
+      {active === 3 && <Allposts />}
     </div>
   );
 }
