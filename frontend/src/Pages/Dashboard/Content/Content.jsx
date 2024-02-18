@@ -9,6 +9,7 @@ import {
 } from "../../../components/Redux/Reducers/UserReducers";
 import { toast } from "react-toastify";
 import Allposts from "../../ADMIN/Allpost/Allposts";
+import Allusers from "../../ADMIN/AllUsers/Allusers";
 export default function Content({ active }) {
   const { user, userError, userUpdateSuccess } = useSelector(
     (state) => state.user
@@ -39,7 +40,7 @@ export default function Content({ active }) {
   };
 
   return (
-    <div className="w-full bg-gray-100 dark:bg-[rgb(16,23,42)]">
+    <div className="w-full  dark:bg-[rgb(16,23,42)]">
       {active === 1 && (
         <div className="w-full dark:bg-[rgb(16,23,42)] px-4 py-6 min-h-[90vh] mt-6 rounded-t">
           <h1 className="text-center md:text-[23px] text-[20px] font-bold ">
@@ -146,6 +147,7 @@ export default function Content({ active }) {
         </div>
       )}
       {active === 3 && <Allposts />}
+      {active === 4 && <Allusers />}
     </div>
   );
 }

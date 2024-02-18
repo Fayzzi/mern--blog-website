@@ -5,6 +5,9 @@ const { upload } = require("../multer.js");
 const catchAsyncErrors = require("../middlewares/CatchAsyncError.js");
 const ErrorHandler = require("../middlewares/ErrorHandler");
 const Post = require("../Models/Post.js");
+const Users = require("../Models/User.js");
+
+const fs = require("fs");
 //create a blog
 router.post(
   "/post-a-blog",
@@ -109,6 +112,16 @@ router.delete(
       const deletedpost = await Post.findByIdAndDelete({
         _id: req.params.postId,
       });
+      deletedpost.images.forEach((im) => {
+        const filename = im;
+        const filepath = "uploads/" + filename;
+        fs.unlink(filepath, (err) => {
+          if (err) {
+            console.log("Error unlink");
+          }
+        });
+      });
+
       res.status(200).json({
         message: "ok",
       });
@@ -147,6 +160,57 @@ router.put(
     res.status(200).json({
       success: true,
       check,
+    });
+  })
+);
+//get all users
+router.get(
+  "/get-all",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const startIndex = req.query.startIndex || 0;
+      const limit = req.query.limit || 9;
+      const sortDirection = req.query.sort === "asc" ? 1 : -1;
+      const alUsers = await Users.find({
+        _id: {
+          $ne: req.user.id, //getting all users except current user
+        },
+      })
+        .sort({ createdAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+      //getting total numer of documnets
+      const totalUsers = await Users.countDocuments();
+      //getting last month users
+      const data = new Date();
+      const oneMonthago = new Date(
+        data.getFullYear(),
+        data.getMonth() - 1,
+        data.getDate()
+      );
+      const totalUsersoftheMonth = await Users.countDocuments({
+        updatedAt: {
+          $gte: oneMonthago,
+        },
+      });
+
+      res.status(200).json({
+        Users: alUsers,
+        totalUsersofMonth: totalUsersoftheMonth,
+        totalUsers: totalUsers,
+      });
+    } catch (error) {}
+  })
+);
+//deleting user
+router.delete(
+  "/delete-user/:id",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    await Users.findByIdAndDelete({ _id: req.params.id });
+    res.json({
+      success: true,
     });
   })
 );

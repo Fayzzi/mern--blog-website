@@ -74,13 +74,11 @@ export default function Allposts() {
                         {new Date(d?.updatedAt).toLocaleDateString()}
                       </Table.Cell>
                       <Table.Cell>
-                        {
-                          <img
-                            className="h-14 w-14 object-cover"
-                            src={"http://localhost:3000/" + d?.images[0]}
-                            alt=""
-                          />
-                        }
+                        <img
+                          className="h-14 w-14 object-cover"
+                          src={"http://localhost:3000/" + d?.images[0]}
+                          alt=""
+                        />
                       </Table.Cell>
                       <Table.Cell>
                         <span>{d?.title}</span>
@@ -99,7 +97,7 @@ export default function Allposts() {
                       <Table.Cell>
                         <Link
                           to={"/create-post-admin/" + d?._id}
-                          className="p-2 bg-[red] text-white rounded cursor-pointer"
+                          className="p-2 bg-[green] text-white rounded cursor-pointer"
                         >
                           Edit
                         </Link>

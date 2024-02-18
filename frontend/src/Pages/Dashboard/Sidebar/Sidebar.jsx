@@ -3,6 +3,10 @@ import {
   IoDocumentOutline,
   IoLogIn,
   IoLogInOutline,
+  IoPeopleCircle,
+  IoPeopleCircleOutline,
+  IoPeopleOutline,
+  IoPeopleSharp,
   IoPersonOutline,
 } from "react-icons/io5";
 import { IoPerson } from "react-icons/io5";
@@ -24,7 +28,7 @@ export default function Sidebar({ active, setActive }) {
     <div className="bg-gray-100 sticky top-12 left-0 dark:bg-[rgb(16,23,42)] border py-5 px-4 mt-6  flex flex-col gap-6 rounded-lg">
       {active === 1 ? (
         <div className="flex gap-1 items-center justify-center">
-          <IoPerson size={20} />
+          <IoPerson title="Profile" size={20} />
           <span className="hidden md:block text-sm md:text-md cursor-pointer">
             Profile
           </span>
@@ -34,12 +38,57 @@ export default function Sidebar({ active, setActive }) {
           onClick={(e) => setActive(1)}
           className="flex gap-1 items-center justify-center"
         >
-          <IoPersonOutline size={20} />
+          <IoPersonOutline title="Profile" size={20} />
           <span className="hidden md:block text-sm md:text-md cursor-pointer">
             Profile
           </span>
         </div>
       )}
+
+      {user && user?.isAdmin ? (
+        <div>
+          {active === 3 ? (
+            <div className="flex gap-1 items-center justify-center">
+              <IoDocument title="All posts" size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Profile
+              </span>
+            </div>
+          ) : (
+            <div
+              onClick={(e) => setActive(3)}
+              className="flex gap-1 items-center justify-center"
+            >
+              <IoDocumentOutline title="All posts" size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Posts
+              </span>
+            </div>
+          )}
+        </div>
+      ) : null}
+      {user && user?.isAdmin ? (
+        <div>
+          {active === 4 ? (
+            <div className="flex gap-1 items-center justify-center">
+              <IoPeopleSharp title="All posts" size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Users
+              </span>
+            </div>
+          ) : (
+            <div
+              onClick={(e) => setActive(4)}
+              className="flex gap-1 items-center justify-center"
+            >
+              <IoPeopleOutline title="All posts" size={20} />
+              <span className="hidden md:block text-sm md:text-md cursor-pointer">
+                Users
+              </span>
+            </div>
+          )}
+        </div>
+      ) : null}
       {active === 2 ? (
         <div className="flex gap-1 items-center justify-center">
           <IoLogIn size={25} />
@@ -52,34 +101,15 @@ export default function Sidebar({ active, setActive }) {
           onClick={signoutUser}
           className="flex gap-1 items-center justify-center"
         >
-          <IoLogInOutline size={25} />
-          <span className="hidden md:block text-sm md:text-md cursor-pointer">
+          <IoLogInOutline title="logout" size={25} />
+          <span
+            title="logout"
+            className="hidden md:block text-sm md:text-md cursor-pointer"
+          >
             LogOut
           </span>
         </div>
       )}
-      {user && user?.isAdmin ? (
-        <div>
-          {active === 3 ? (
-            <div className="flex gap-1 items-center justify-center">
-              <IoDocument size={20} />
-              <span className="hidden md:block text-sm md:text-md cursor-pointer">
-                Profile
-              </span>
-            </div>
-          ) : (
-            <div
-              onClick={(e) => setActive(3)}
-              className="flex gap-1 items-center justify-center"
-            >
-              <IoDocumentOutline size={20} />
-              <span className="hidden md:block text-sm md:text-md cursor-pointer">
-                Posts
-              </span>
-            </div>
-          )}
-        </div>
-      ) : null}
     </div>
   );
 }
