@@ -31,9 +31,9 @@ export default function Allusers() {
       });
   };
   return (
-    <div>
+    <div className="max-w-[75vw] mx-auto overflow-x-scroll">
       <Table
-        className="table-auto overflow-x-scroll mx-auto  scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500"
+        className=" mx-auto  scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500"
         hoverable
       >
         <Table.Head>

@@ -50,14 +50,13 @@ export default function Allposts() {
   };
   return (
     <div className="w-full min-h-screen px-4 py-6">
-      <h1 className="text-center mb-6 text-[20px] md:text-[24px] font-semibold">
-        Posts
-      </h1>
-
       {user && user?.isAdmin && data.length > 0 ? (
         <>
-          <div className="table-auto overflow-x-scroll mx-auto  scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500">
-            <Table hoverable className="shadow-sm">
+          <div className=" overflow-x-scroll max-w-[75vw] mx-auto  ">
+            <Table
+              hoverable
+              className="shadow-sm scrollbar scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500"
+            >
               <Table.Head>
                 <Table.HeadCell>Date Updated</Table.HeadCell>
                 <Table.HeadCell>Post Image</Table.HeadCell>

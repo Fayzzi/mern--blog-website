@@ -101,7 +101,7 @@ export default function Createpostpage() {
   };
   console.log("Images loaded", images);
   return (
-    <div className="bg-gray-50">
+    <div className="">
       <div className="min-h-screen md:w-[60vw] w-full mx-auto">
         <h1 className="text-center text-[20px] p-3 md:text-[24px] font-semibold">
           Create Post

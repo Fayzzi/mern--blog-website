@@ -8,7 +8,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen">
       <div className="flex w-11/12 mx-auto gap-2 justify-between">
-        <div className="md:w-[250px]  w-fit">
+        <div className="md:max-w-[25vw]  w-fit">
           <Sidebar setActive={setActive} active={active} />
         </div>
         <Content active={active} />
