@@ -5,7 +5,7 @@ const { upload } = require("../multer.js");
 const catchAsyncErrors = require("../middlewares/CatchAsyncError.js");
 const ErrorHandler = require("../middlewares/ErrorHandler");
 const Post = require("../Models/Post.js");
-
+//create a blog
 router.post(
   "/post-a-blog",
   upload.array("files", 100),
@@ -113,6 +113,41 @@ router.delete(
         message: "ok",
       });
     }
+  })
+);
+// Update the post images
+router.post(
+  "/upload-image",
+  upload.array("image", 100), // Updated field name to "image"
+  catchAsyncErrors(async (req, res, next) => {
+    const filename = req.files.map((f) => f.filename);
+    res.status(200).json(filename);
+  })
+);
+//updateComplete post
+router.put(
+  "/update-post/:id",
+
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    const check = await Post.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          title: req.body.title,
+          description: req.body.description,
+          images: req.body.images,
+          user: req.user.id,
+          category: req.body.category,
+        },
+      }
+    );
+    res.status(200).json({
+      success: true,
+      check,
+    });
   })
 );
 

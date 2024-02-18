@@ -2,6 +2,7 @@ import axios from "axios";
 import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Allposts() {
   const { user } = useSelector((state) => state.user);
@@ -63,6 +64,7 @@ export default function Allposts() {
                 <Table.HeadCell>Post title</Table.HeadCell>
                 <Table.HeadCell>Category</Table.HeadCell>
                 <Table.HeadCell>Delete</Table.HeadCell>
+                <Table.HeadCell>Edit</Table.HeadCell>
               </Table.Head>
               {data &&
                 data.map((d, i) => (
@@ -93,6 +95,14 @@ export default function Allposts() {
                         >
                           Delete
                         </span>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Link
+                          to={"/create-post-admin/" + d?._id}
+                          className="p-2 bg-[red] text-white rounded cursor-pointer"
+                        >
+                          Edit
+                        </Link>
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>

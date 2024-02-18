@@ -134,7 +134,7 @@ export default function Content({ active }) {
                 Submit
               </Button>
               {user && user?.isAdmin ? (
-                <Link to={"/create-post-admin"}>
+                <Link to={"/create-post-admin/new"}>
                   {" "}
                   <Button gradientDuoTone={"greenToBlue"} outline>
                     Create a post

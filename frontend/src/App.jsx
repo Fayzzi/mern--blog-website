@@ -43,7 +43,15 @@ function App() {
             }
           />
           <Route
-            path="/create-post-admin"
+            path="/create-post-admin/new"
+            element={
+              <AdminPrivate>
+                <Createpostpage />
+              </AdminPrivate>
+            }
+          />
+          <Route
+            path="/create-post-admin/:id"
             element={
               <AdminPrivate>
                 <Createpostpage />

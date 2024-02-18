@@ -2,16 +2,18 @@ import { Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useParams } from "react-router-dom";
 
 export default function Createpostpage() {
   const [images, setImages] = useState([]);
-  const [blogUploadProgress, setBlogUploadProgress] = useState(0); // State to track upload progress
+  const [blogUploadProgress, setBlogUploadProgress] = useState(0);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const { id } = useParams();
 
   const UploadBlog = async (e) => {
     e.preventDefault();
@@ -19,33 +21,85 @@ export default function Createpostpage() {
     formData.append("title", title);
     formData.append("category", category);
     formData.append("description", description);
-    images.forEach((image) => {
-      formData.append("files", image);
-    });
 
-    try {
-      const response = await axios.post("/api/v2/admin/post-a-blog", formData, {
-        onUploadProgress: (progressEvent) => {
-          const progress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setBlogUploadProgress(progress); // Update progress state
-        },
+    if (images.length > 0) {
+      images.forEach((image) => {
+        formData.append("files", image); // Use "image" as field name for consistency with server-side code
       });
-      alert("success");
-    } catch (error) {
-      alert(error.response.data.message);
-    } finally {
-      setBlogUploadProgress(0); // Reset progress after upload completes
+    }
+
+    if (id) {
+      try {
+        await axios.put(
+          "/api/v2/admin/update-post/" + id,
+          {
+            title,
+            category,
+            description,
+            images,
+          },
+          {
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setBlogUploadProgress(progress);
+            },
+          }
+        );
+        alert("Success");
+      } catch (error) {
+        alert(error.response.data.message);
+      } finally {
+        setBlogUploadProgress(0);
+      }
+    } else {
+      try {
+        const response = await axios.post(
+          "/api/v2/admin/post-a-blog",
+          formData,
+          {
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setBlogUploadProgress(progress);
+            },
+          }
+        );
+        alert("Success");
+      } catch (error) {
+        alert(error.response.data.message);
+      } finally {
+        setBlogUploadProgress(0);
+      }
     }
   };
 
-  const handleFileChange = (e) => {
-    e.preventDefault();
-    const allImages = Array.from(e.target.files);
-    setImages(allImages);
-  };
+  useEffect(() => {
+    if (!id) return;
+    axios.get("/api/v2/admin/getposts?postId=" + id).then((response) => {
+      setTitle(response.data.posts[0].title);
+      setCategory(response.data.posts[0].category);
+      setDescription(response.data.posts[0].description);
+      setImages(response.data.posts[0].images);
+    });
+  }, [id]);
 
+  const handleFileChange = (e) => {
+    if (id) {
+      const formData = new FormData();
+      const myImages = Array.from(e.target.files);
+      myImages.forEach((image) => formData.append("image", image)); // Updated field name to "image"
+      axios.post("/api/v2/admin/upload-image", formData).then(({ data }) => {
+        setImages((prev) => [...prev, ...data]);
+      });
+    } else {
+      const allImages = Array.from(e.target.files);
+      setImages((prev) => [...prev, ...allImages]);
+    }
+  };
+  console.log("Images loaded", images);
   return (
     <div className="bg-gray-50">
       <div className="min-h-screen md:w-[60vw] w-full mx-auto">
@@ -83,6 +137,20 @@ export default function Createpostpage() {
               Upload image
             </Button>
           </div>
+          {images && images.length > 0 && (
+            <div className="grid grid-cols-3">
+              {images.map((d, i) => (
+                <img
+                  key={i}
+                  className="h-[150px] w-[150px] object-cover"
+                  src={
+                    id ? "http://localhost:3000/" + d : URL.createObjectURL(d)
+                  }
+                  alt={`image-${i}`}
+                />
+              ))}
+            </div>
+          )}
           <ReactQuill
             required
             value={description}
@@ -92,7 +160,7 @@ export default function Createpostpage() {
             className="min-h-80 mb-12 rounded-md h-80"
           />
           <Button type="submit" gradientDuoTone={"purpleToPink"}>
-            {blogUploadProgress > 0 ? ( // Display progress bar if upload progress is greater than 0
+            {blogUploadProgress > 0 ? (
               <div className="w-12 h-12">
                 <CircularProgressbar
                   value={blogUploadProgress}
