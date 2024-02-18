@@ -42,6 +42,7 @@ router.post(
     }
   })
 );
+//getting all pots
 router.get(
   "/getposts",
   catchAsyncErrors(async (req, res, next) => {
@@ -93,6 +94,25 @@ router.get(
         totalPost,
       });
     } catch (error) {}
+  })
+);
+//deleting post
+router.delete(
+  "/delete-post/:postId/:userId",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    if (req.user.id !== req.params.userId) {
+      return next(
+        new ErrorHandler("You are not allowed to delete a blog!!", 400)
+      );
+    } else {
+      const deletedpost = await Post.findByIdAndDelete({
+        _id: req.params.postId,
+      });
+      res.status(200).json({
+        message: "ok",
+      });
+    }
   })
 );
 

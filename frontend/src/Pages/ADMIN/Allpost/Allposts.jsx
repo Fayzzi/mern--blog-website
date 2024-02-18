@@ -9,7 +9,7 @@ export default function Allposts() {
   const [showmore, setShowmore] = useState(true);
   const handleShowmore = async (e) => {
     e.preventDefault();
-    const startLength = data.length; // Use data.length instead of data && data.length
+    const startLength = data.length; // Use data.length
     try {
       const { data } = await axios.get(
         "/api/v2/admin/getposts?userId=" +
@@ -39,6 +39,14 @@ export default function Allposts() {
       fetchPost();
     }
   }, [user]);
+  //deleting post
+  const handleDelete = async (e, postId) => {
+    await axios
+      .delete("/api/v2/admin/delete-post/" + postId + "/" + user?._id)
+      .then((response) => {
+        setData((prev) => prev.filter((post) => post._id !== postId));
+      });
+  };
   return (
     <div className="w-full min-h-screen px-4 py-6">
       <h1 className="text-center mb-6 text-[20px] md:text-[24px] font-semibold">
@@ -79,7 +87,12 @@ export default function Allposts() {
                         <span>{d?.category}</span>
                       </Table.Cell>
                       <Table.Cell>
-                        <span>Delete</span>
+                        <span
+                          className="p-2 bg-[red] text-white rounded cursor-pointer"
+                          onClick={(e) => handleDelete(e, d?._id)}
+                        >
+                          Delete
+                        </span>
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>
