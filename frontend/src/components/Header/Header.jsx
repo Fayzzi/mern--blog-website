@@ -1,23 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../Redux/ThemeSlice/ThemSlice";
+
 export default function Header() {
   const path = useLocation().pathname;
   const dispatch = useDispatch();
-
-  const [active, setActive] = useState(false);
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handlenaviagtion = (e) => {
+  useEffect(() => {
+    const searchTermFromUrl = searchParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [searchParams]);
+  console.log(searchParams);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchParams({ searchTerm: searchTerm });
+    navigate(`/search?searchTerm=${searchTerm}`);
+  };
+
+  const handleNavigation = () => {
     navigate("/dashboard");
     setActive(false);
   };
+
+  const [active, setActive] = useState(false);
+
   return (
     <Navbar className="border-b-2">
       <Link
@@ -29,12 +51,14 @@ export default function Header() {
         </span>
         Blog
       </Link>
-      <form className="">
+      <form onSubmit={handleSearch} className="">
         <TextInput
-          rightIcon={AiOutlineSearch}
           type="text"
-          placeholder="Search here..."
-          className="hidden 800px:inline-block"
+          placeholder="Search..."
+          rightIcon={AiOutlineSearch}
+          className="hidden lg:inline"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
       <Button color="gray" pill className="800px:hidden inline-block ">
@@ -52,7 +76,7 @@ export default function Header() {
         {isAuthenticated ? (
           <div className="relative">
             <Button
-              onClick={(e) => setActive(!active)}
+              onClick={() => setActive(!active)}
               className=" hidden sm:inline-block"
               outline
               gradientDuoTone={"purpleToBlue"}
@@ -64,7 +88,7 @@ export default function Header() {
               <div className="w-[180px] p-3 shadow border flex flex-col gap-2  left-[-100px] h-[90px] bottom-[-90px] z-[40] bg-white absolute">
                 <h1
                   className="cursor-pointer text-center hover:bg-gray-200"
-                  onClick={handlenaviagtion}
+                  onClick={handleNavigation}
                 >
                   Profile
                 </h1>

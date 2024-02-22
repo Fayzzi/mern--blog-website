@@ -68,40 +68,42 @@ export default function Allposts() {
               {data &&
                 data.map((d, i) => (
                   <Table.Body key={i}>
-                    <Table.Row>
-                      <Table.Cell>
-                        {new Date(d?.updatedAt).toLocaleDateString()}
-                      </Table.Cell>
-                      <Table.Cell>
-                        <img
-                          className="h-14 w-14 object-cover"
-                          src={"http://localhost:3000/" + d?.images[0]}
-                          alt=""
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <span>{d?.title}</span>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <span>{d?.category}</span>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <span
-                          className="p-2 bg-[red] text-white rounded cursor-pointer"
-                          onClick={(e) => handleDelete(e, d?._id)}
-                        >
-                          Delete
-                        </span>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Link
-                          to={"/create-post-admin/" + d?._id}
-                          className="p-2 bg-[green] text-white rounded cursor-pointer"
-                        >
-                          Edit
-                        </Link>
-                      </Table.Cell>
-                    </Table.Row>
+                    <Link to={"/post/" + d?._id}>
+                      <Table.Row>
+                        <Table.Cell>
+                          {new Date(d?.updatedAt).toLocaleDateString()}
+                        </Table.Cell>
+                        <Table.Cell>
+                          <img
+                            className="h-14 w-14 object-cover"
+                            src={"http://localhost:3000/" + d?.images[0]}
+                            alt=""
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <span>{d?.title}</span>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <span>{d?.category}</span>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <span
+                            className="p-2 bg-[red] text-white rounded cursor-pointer"
+                            onClick={(e) => handleDelete(e, d?._id)}
+                          >
+                            Delete
+                          </span>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Link
+                            to={"/create-post-admin/" + d?._id}
+                            className="p-2 bg-[green] text-white rounded cursor-pointer"
+                          >
+                            Edit
+                          </Link>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Link>
                   </Table.Body>
                 ))}
             </Table>

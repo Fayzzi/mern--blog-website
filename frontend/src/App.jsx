@@ -15,6 +15,8 @@ import { GetUser } from "./components/Redux/Reducers/UserReducers";
 import ProtectedRoutes from "./components/ProtectedRoutes/Protected";
 import Createpostpage from "./Pages/ADMIN/Createpostpage";
 import AdminPrivate from "./components/ProtectedRoutes/AdminPrivate";
+import PostDetails from "./Pages/PostDetails/PostDetails";
+import Search from "./Pages/Search/Search";
 function App() {
   const dispatch = useDispatch();
   const { user, userLoading, isAuthenticated } = useSelector(
@@ -34,6 +36,9 @@ function App() {
           <Route element={<Projects />} path="/projects" />
           <Route element={<Login />} path="/login" />
           <Route element={<Signup />} path="/signup" />
+          <Route element={<PostDetails />} path="/post/:id" />
+          <Route element={<Search />} path="/search" />
+
           <Route
             path="/dashboard"
             element={
